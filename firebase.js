@@ -7,7 +7,12 @@ import {
 import { getStorage } from "firebase/storage";
 import { initializeFirestore } from "firebase/firestore";
 const firebaseConfig = {
- // your config goes here
+  apiKey: "AIzaSyCeQSVrCsVfM8f_fU9TrYRW5RJJhpH8ypE",
+  authDomain: "my-proj-1c47e.firebaseapp.com",
+  projectId: "my-proj-1c47e",
+  storageBucket: "my-proj-1c47e.appspot.com",
+  messagingSenderId: "845631022070",
+  appId: "1:845631022070:web:6f67ca9cb5d32ad83e5dd7"
 };
 
 export const app = initializeApp(firebaseConfig);

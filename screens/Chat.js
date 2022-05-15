@@ -1,5 +1,5 @@
 // @refresh reset
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import React, { useCallback, useContext, useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  Button,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase";
@@ -17,6 +18,7 @@ import {
   addDoc,
   collection,
   doc,
+  deleteDoc,
   onSnapshot,
   setDoc,
   updateDoc,
@@ -58,6 +60,7 @@ export default function Chat() {
 
   const roomRef = doc(db, "rooms", roomId);
   const roomMessagesRef = collection(db, "rooms", roomId, "messages");
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -151,17 +154,34 @@ export default function Chat() {
     }
   }
 
+  async function deleteMessage(){
+    const messageId = this["currentMessage"]["_id"];
+      setMessages(messages.filter(message => message._id !== this["currentMessage"]["_id"])); 
+  }
+
+  async function deleteChat() {
+    deleteDoc(roomRef);
+    navigation.navigate("home")
+  }
+
   return (
     <ImageBackground
       resizeMode="cover"
       source={require("../assets/chatbg.png")}
       style={{ flex: 1 }}
     >
+      <Button
+        onPress={deleteChat}
+        title="Delete Chat"
+        color="#841584"
+        accessibilityLabel="Permanently delete Chat"
+      />
       <GiftedChat
         onSend={onSend}
         messages={messages}
         user={senderUser}
         renderAvatar={null}
+        onLongPress={deleteMessage}
         renderActions={(props) => (
           <Actions
             {...props}
